@@ -31,7 +31,6 @@ public class BasicGameApp implements Runnable {
     Ghost[] ghostWaterfall;
     Image ghostImage;
 
-
     public Boolean firstCrash;
 
     // Main method definition
@@ -51,14 +50,15 @@ public class BasicGameApp implements Runnable {
         RosaMonster2 = new Rosamonster("Rosa monster.jpeg", 500, 200, 25);
         RosaMonsterImage2 = Toolkit.getDefaultToolkit().getImage("Rosa Monster.jpeg");
 
-        ghostWaterfall = new Ghost[6];
-        ghostImage = Toolkit.getDefaultToolkit().getImage("Murica Ghost.jpeg");
+        ghostWaterfall = new Ghost[15];
+
+        // ONLY CHANGE IN THE ENTIRE FILE
+        ghostImage =Toolkit.getDefaultToolkit().getImage("Murica Ghost.jpeg");
+
         for(int x = 0; x < ghostWaterfall.length; x = x+1){
             ghostWaterfall[x] = new Ghost("ghostDrink " + x, (int)(Math.random()* WIDTH), (int)(Math.random()* HEIGHT), 25);
         }
         run();
-
-
     } // end BasicGameApp constructor
 
 //*******************************************************************************
@@ -82,54 +82,64 @@ public class BasicGameApp implements Runnable {
         whiteMonster.wrap();
         RosaMonster2.bounce();
         checkCrash();
+        checkCrashes();
         for(int x = 0; x < ghostWaterfall.length; x = x+1){
-           ghostWaterfall[x].move();
+            ghostWaterfall[x].move();
         }
-
-
     }
+
     public void checkCrash(){
         if(whiteMonster.rect.intersects(RosaMonster2.rect)&& firstCrash == true){
-           whiteMonster.dx=-whiteMonster.dx;
-           RosaMonster2.dx=-RosaMonster2.dx;
+            whiteMonster.dx=-whiteMonster.dx;
+            RosaMonster2.dx=-RosaMonster2.dx;
             whiteMonster.dy=-whiteMonster.dy;
             RosaMonster2.dy=-RosaMonster2.dy;
             RosaMonster2.height += 1000;
             RosaMonster2.width += 1000;
-           double rand1= Math.random();
-           double rand2= Math.random();
+            double rand1= Math.random();
+            double rand2= Math.random();
             RosaMonster2.dx=0;
             RosaMonster2.dy=0;
 
-           firstCrash = false;
-           RosaMonster2.isAlive = false;
-           //this altered checkCrash method causes the pink monster can to get bigger and bigger until
-            //eventually it just gives up on life and disappears
-
-           }
+            firstCrash = false;
+            RosaMonster2.isAlive = false;
+        }
 
         if (!whiteMonster.rect.intersects(RosaMonster2.rect)) {
             firstCrash = true;
         }
     }
+
+    public void checkCrashes(){
+        for(int x =0; x < ghostWaterfall.length; x = x +1 ){
+            for (int y = 0; y < ghostWaterfall.length; y = y +1){
+                if ( ghostWaterfall[x].rect.intersects(ghostWaterfall[y].rect)){
+                    whiteMonster.dx = -whiteMonster.dx;
+                }
+            }
+        }
+    }
+
     //Paints things on the screen using bufferStrategy
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.setColor(new Color(100, 200, 200));
+        g.drawImage("7-11.jpeg", "7-11.jpeg".)
         g.fillRect(0, 0, WIDTH, HEIGHT);
-
 
         // draw the image
         g.drawImage(whiteMonsterImage, whiteMonster.xpos, whiteMonster.ypos, whiteMonster.width, whiteMonster.height, null);
-        if(RosaMonster2.width < 1000){g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos, RosaMonster2.width, RosaMonster2.height, null);}
+        if(RosaMonster2.width < 1000){
+            g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos, RosaMonster2.width, RosaMonster2.height, null);
 
-
-        g.dispose();
-        bufferStrategy.show();
+        }
         for(int x = 0; x < ghostWaterfall.length; x = x+1){
             g.drawImage(ghostImage, ghostWaterfall[x].xpos,ghostWaterfall[x].ypos, ghostWaterfall[x].width, ghostWaterfall[x].height, null);
         }
+
+        g.dispose();
+        bufferStrategy.show();
+
     }
 
     //Pauses or sleeps the computer for the amount specified in milliseconds
