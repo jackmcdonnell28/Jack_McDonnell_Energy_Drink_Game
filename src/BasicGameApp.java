@@ -31,12 +31,15 @@ public class BasicGameApp implements Runnable {
     Ghost[] ghostWaterfall;
     Image ghostImage;
 
+    // *** BACKGROUND IMAGE (ADDED) ***
+    Image backgroundImage;
+
     public Boolean firstCrash;
 
     // Main method definition
     public static void main(String[] args) {
-        BasicGameApp ex = new BasicGameApp();   //creates a new instance of the game
-        new Thread(ex).start();                 //creates a thread & starts up the code in the run( ) method
+        BasicGameApp ex = new BasicGameApp();
+        new Thread(ex).start();
     }
 
     // Constructor
@@ -44,6 +47,7 @@ public class BasicGameApp implements Runnable {
 
         setUpGraphics();
         firstCrash = true;
+
         whiteMonster = new Whitemonster("Whitemonster.jpeg", 300, 300, 75);
         whiteMonsterImage = Toolkit.getDefaultToolkit().getImage("Whitemonster.jpeg");
 
@@ -52,52 +56,60 @@ public class BasicGameApp implements Runnable {
 
         ghostWaterfall = new Ghost[15];
 
-        // ONLY CHANGE IN THE ENTIRE FILE
-        ghostImage =Toolkit.getDefaultToolkit().getImage("Murica Ghost.jpeg");
+        ghostImage = Toolkit.getDefaultToolkit().getImage("Murica Ghost.jpeg");
 
-        for(int x = 0; x < ghostWaterfall.length; x = x+1){
-            ghostWaterfall[x] = new Ghost("ghostDrink " + x, (int)(Math.random()* WIDTH), (int)(Math.random()* HEIGHT), 25);
+        //  LOAD BACKGROUND IMAGE (THIS TOOK SO LONG!!!!)
+        backgroundImage = Toolkit.getDefaultToolkit().getImage("7-11.jpeg");
+
+        for(int x = 0; x < ghostWaterfall.length; x++){
+            ghostWaterfall[x] = new Ghost(
+                    "ghostDrink " + x,
+                    (int)(Math.random()* WIDTH),
+                    (int)(Math.random()* HEIGHT),
+                    25
+            );
         }
         run();
-    } // end BasicGameApp constructor
+    }
 
 //*******************************************************************************
-//User Method Section
 
-    // main thread
     public void run() {
         while (true) {
-            moveThings();// move all the game objects
-            if (RosaMonster2.isAlive ==  false){
-                RosaMonster2.width = RosaMonster2.width + 10;
-                RosaMonster2.height = RosaMonster2.height + 10;
+            moveThings();
+            if (!RosaMonster2.isAlive){
+                RosaMonster2.width += 10;
+                RosaMonster2.height += 10;
             }
-
-            render();      // paint the graphics
-            pause(15);     // sleep for 15 ms
+            render();
+            pause(35);
         }
     }
 
     public void moveThings() {
         whiteMonster.wrap();
         RosaMonster2.bounce();
+        for (int x = 0; x < ghostWaterfall.length; x++) {
+            ghostWaterfall[x].bounce();  // FIX
+
+        }
         checkCrash();
         checkCrashes();
-        for(int x = 0; x < ghostWaterfall.length; x = x+1){
+        for(int x = 0; x < ghostWaterfall.length; x++){
             ghostWaterfall[x].move();
         }
     }
 
     public void checkCrash(){
-        if(whiteMonster.rect.intersects(RosaMonster2.rect)&& firstCrash == true){
+        if(whiteMonster.rect.intersects(RosaMonster2.rect)&& firstCrash){
             whiteMonster.dx=-whiteMonster.dx;
             RosaMonster2.dx=-RosaMonster2.dx;
             whiteMonster.dy=-whiteMonster.dy;
             RosaMonster2.dy=-RosaMonster2.dy;
+
             RosaMonster2.height += 1000;
             RosaMonster2.width += 1000;
-            double rand1= Math.random();
-            double rand2= Math.random();
+
             RosaMonster2.dx=0;
             RosaMonster2.dy=0;
 
@@ -111,9 +123,9 @@ public class BasicGameApp implements Runnable {
     }
 
     public void checkCrashes(){
-        for(int x =0; x < ghostWaterfall.length; x = x +1 ){
-            for (int y = 0; y < ghostWaterfall.length; y = y +1){
-                if ( ghostWaterfall[x].rect.intersects(ghostWaterfall[y].rect)){
+        for(int x =0; x < ghostWaterfall.length; x++){
+            for (int y = 0; y < ghostWaterfall.length; y++){
+                if (ghostWaterfall[x].rect.intersects(ghostWaterfall[y].rect)){
                     whiteMonster.dx = -whiteMonster.dx;
                 }
             }
@@ -124,34 +136,39 @@ public class BasicGameApp implements Runnable {
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.drawImage("7-11.jpeg", "7-11.jpeg".)
-        g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        // draw the image
-        g.drawImage(whiteMonsterImage, whiteMonster.xpos, whiteMonster.ypos, whiteMonster.width, whiteMonster.height, null);
+        g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null);
+
+
+        g.drawImage(whiteMonsterImage, whiteMonster.xpos, whiteMonster.ypos,
+                whiteMonster.width, whiteMonster.height, null);
+
         if(RosaMonster2.width < 1000){
-            g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos, RosaMonster2.width, RosaMonster2.height, null);
-
+            g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos,
+                    RosaMonster2.width, RosaMonster2.height, null);
         }
-        for(int x = 0; x < ghostWaterfall.length; x = x+1){
-            g.drawImage(ghostImage, ghostWaterfall[x].xpos,ghostWaterfall[x].ypos, ghostWaterfall[x].width, ghostWaterfall[x].height, null);
+
+        for(int x = 0; x < ghostWaterfall.length; x++){
+            g.drawImage(ghostImage,
+                    ghostWaterfall[x].xpos,
+                    ghostWaterfall[x].ypos,
+                    ghostWaterfall[x].width,
+                    ghostWaterfall[x].height,
+                    null);
         }
 
         g.dispose();
         bufferStrategy.show();
-
     }
 
-    //Pauses or sleeps the computer for the amount specified in milliseconds
     public void pause(int time ) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {}
     }
 
-    //Graphics setup method
     private void setUpGraphics() {
-        frame = new JFrame("White Monster Bounce");   //Create the program window or frame.
+        frame = new JFrame("White Monster Bounce");
 
         panel = (JPanel) frame.getContentPane();
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -173,5 +190,4 @@ public class BasicGameApp implements Runnable {
         canvas.requestFocus();
         System.out.println("DONE graphic setup");
     }
-
 }
