@@ -4,14 +4,17 @@
 
 //*******************************************************************************
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+
 import java.awt.image.BufferStrategy;
+import java.awt.event.KeyListener;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 //*******************************************************************************
 
-public class BasicGameApp implements Runnable {
+public class BasicGameApp implements Runnable, KeyListener{
 
     //Variable Definition Section
     final int WIDTH = 1000;
@@ -21,6 +24,7 @@ public class BasicGameApp implements Runnable {
     public JFrame frame;
     public Canvas canvas;
     public JPanel panel;
+    public boolean pressingKey;
 
     public BufferStrategy bufferStrategy;
 
@@ -69,7 +73,7 @@ public class BasicGameApp implements Runnable {
                     25
             );
         }
-        run();
+
     }
 
 //*******************************************************************************
@@ -166,7 +170,61 @@ public class BasicGameApp implements Runnable {
             Thread.sleep(time);
         } catch (InterruptedException e) {}
     }
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+        pressingKey = true;
+        if (e.getKeyCode() == 38) { //up arrow
+            whiteMonster.dy = -10;
+            whiteMonster.dx = 0;
+        }
+        if (e.getKeyCode() == 40) { //down arrow
+            whiteMonster.dy = 10;
+            whiteMonster.dx = 0;
+        }
+        if (e.getKeyCode() == 37) { //left arrow
+            whiteMonster.dy = 0;
+            whiteMonster.dx = -10;
+        }
+        if (e.getKeyCode() == 39) { //right arrow
+            whiteMonster.dy = 0;
+            whiteMonster.dx = 10;
+        }
+        if (e.getKeyCode() == 54-55){ //6-7 keys
+            whiteMonster.dy = whiteMonster.xpos + whiteMonster.dx * (3/4);// makes Monster move in increments of 6, perhaps maybe 7 (dx = 8)
+            whiteMonster.rect = new Rectangle(whiteMonster.xpos, whiteMonster.ypos, whiteMonster.width, whiteMonster.height );
+        }
+    }
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // required but unused
+    }
 
+    @Override
+    public void keyReleased (KeyEvent e){
+        System.out.println();
+        pressingKey = true;
+        if (e.getKeyCode() == 38) { //up arrow
+            whiteMonster.dy = 0;
+            whiteMonster.dx = 0;
+        }
+        if (e.getKeyCode() == 40) { //down arrow
+            whiteMonster.dy = 0;
+            whiteMonster.dx = 0;
+        }
+        if (e.getKeyCode() == 37) { //left arrow
+            whiteMonster.dy = 0;
+            whiteMonster.dx = 0;
+        }
+        if (e.getKeyCode() == 39) { //right arrow
+            whiteMonster.dy = 0;
+            whiteMonster.dx = 0;
+        }
+        if (e.getKeyCode() == 54 - 55) { //6-7 keys
+            whiteMonster.dy = whiteMonster.xpos + whiteMonster.dx * (3 / 4);// makes Monster move in increments of 6, perhaps maybe 7 (dx = 8)
+            whiteMonster.rect = new Rectangle(whiteMonster.xpos, whiteMonster.ypos, whiteMonster.width, whiteMonster.height);
+        }
+    }
     private void setUpGraphics() {
         frame = new JFrame("White Monster Bounce");
 
@@ -188,6 +246,9 @@ public class BasicGameApp implements Runnable {
         canvas.createBufferStrategy(2);
         bufferStrategy = canvas.getBufferStrategy();
         canvas.requestFocus();
+        canvas.addKeyListener(this);
         System.out.println("DONE graphic setup");
+
+
     }
 }
