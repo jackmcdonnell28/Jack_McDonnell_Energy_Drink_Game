@@ -52,15 +52,15 @@ public class BasicGameApp implements Runnable, KeyListener{
         setUpGraphics();
         firstCrash = true;
 
-        whiteMonster = new Whitemonster("Whitemonster.jpeg", 300, 300, 75);
-        whiteMonsterImage = Toolkit.getDefaultToolkit().getImage("Whitemonster.jpeg");
+        whiteMonster = new Whitemonster("Whitemonster.png", 0, 300, 75);
+        whiteMonsterImage = Toolkit.getDefaultToolkit().getImage("Whitemonster.png");
 
-        RosaMonster2 = new Rosamonster("Rosa monster.jpeg", 500, 200, 25);
-        RosaMonsterImage2 = Toolkit.getDefaultToolkit().getImage("Rosa Monster.jpeg");
+        RosaMonster2 = new Rosamonster("Rosa monster.png", 1000, 200, 25);
+        RosaMonsterImage2 = Toolkit.getDefaultToolkit().getImage("Rosa Monster.png");
 
-        ghostWaterfall = new Ghost[15];
+        ghostWaterfall = new Ghost[8];
 
-        ghostImage = Toolkit.getDefaultToolkit().getImage("Murica Ghost.jpeg");
+        ghostImage = Toolkit.getDefaultToolkit().getImage("Murica Ghost.png");
 
         //  LOAD BACKGROUND IMAGE (THIS TOOK SO LONG!!!!)
         backgroundImage = Toolkit.getDefaultToolkit().getImage("7-11.jpeg");
@@ -81,10 +81,7 @@ public class BasicGameApp implements Runnable, KeyListener{
     public void run() {
         while (true) {
             moveThings();
-            if (!RosaMonster2.isAlive){
-                RosaMonster2.width += 10;
-                RosaMonster2.height += 10;
-            }
+
             render();
             pause(35);
         }
@@ -92,7 +89,7 @@ public class BasicGameApp implements Runnable, KeyListener{
 
     public void moveThings() {
         whiteMonster.wrap();
-        RosaMonster2.bounce();
+        RosaMonster2.wrap();
         for (int x = 0; x < ghostWaterfall.length; x++) {
             ghostWaterfall[x].bounce();  // FIX
 
@@ -111,8 +108,6 @@ public class BasicGameApp implements Runnable, KeyListener{
             whiteMonster.dy=-whiteMonster.dy;
             RosaMonster2.dy=-RosaMonster2.dy;
 
-            RosaMonster2.height += 1000;
-            RosaMonster2.width += 1000;
 
             RosaMonster2.dx=0;
             RosaMonster2.dy=0;
@@ -147,10 +142,9 @@ public class BasicGameApp implements Runnable, KeyListener{
         g.drawImage(whiteMonsterImage, whiteMonster.xpos, whiteMonster.ypos,
                 whiteMonster.width, whiteMonster.height, null);
 
-        if(RosaMonster2.width < 1000){
+
             g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos,
                     RosaMonster2.width, RosaMonster2.height, null);
-        }
 
         for(int x = 0; x < ghostWaterfall.length; x++){
             g.drawImage(ghostImage,
@@ -190,6 +184,22 @@ public class BasicGameApp implements Runnable, KeyListener{
             whiteMonster.dy = 0;
             whiteMonster.dx = 10;
         }
+        if (e.getKeyCode() == 87) { //up arrow
+            RosaMonster2.dy = -10;
+            RosaMonster2.dx = 0;
+        }
+        if (e.getKeyCode() == 83) { //down arrow
+           RosaMonster2.dy = 10;
+            RosaMonster2.dx = 0;
+        }
+        if (e.getKeyCode() == 65) { //left arrow
+            RosaMonster2.dy = 0;
+            RosaMonster2.dx = -10;
+        }
+        if (e.getKeyCode() == 68) { //right arrow
+            RosaMonster2.dy = 0;
+            RosaMonster2.dx = 10;
+        }
         if (e.getKeyCode() == 54-55){ //6-7 keys
             whiteMonster.dy = whiteMonster.xpos + whiteMonster.dx * (3/4);// makes Monster move in increments of 6, perhaps maybe 7 (dx = 8)
             whiteMonster.rect = new Rectangle(whiteMonster.xpos, whiteMonster.ypos, whiteMonster.width, whiteMonster.height );
@@ -204,19 +214,19 @@ public class BasicGameApp implements Runnable, KeyListener{
     public void keyReleased (KeyEvent e){
         System.out.println();
         pressingKey = true;
-        if (e.getKeyCode() == 38) { //up arrow
+        if (e.getKeyCode() == 38) { //38 is up arrow
             whiteMonster.dy = 0;
             whiteMonster.dx = 0;
         }
-        if (e.getKeyCode() == 40) { //down arrow
+        if (e.getKeyCode() == 40) { //40 is down arrow
             whiteMonster.dy = 0;
             whiteMonster.dx = 0;
         }
-        if (e.getKeyCode() == 37) { //left arrow
+        if (e.getKeyCode() == 37) { //37 is left arrow
             whiteMonster.dy = 0;
             whiteMonster.dx = 0;
         }
-        if (e.getKeyCode() == 39) { //right arrow
+        if (e.getKeyCode() == 39) { //39 is right arrow
             whiteMonster.dy = 0;
             whiteMonster.dx = 0;
         }
