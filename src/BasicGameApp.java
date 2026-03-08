@@ -5,7 +5,6 @@
 //*******************************************************************************
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-
 import java.awt.image.BufferStrategy;
 import java.awt.event.KeyListener;
 import java.awt.*;
@@ -25,9 +24,10 @@ public class BasicGameApp implements Runnable, KeyListener{
     public Canvas canvas;
     public JPanel panel;
     public boolean pressingKey;
+    public SoundFile canOpening;
+
 
     public BufferStrategy bufferStrategy;
-
     Whitemonster whiteMonster;
     Image whiteMonsterImage;
     Rosamonster RosaMonster2;
@@ -73,7 +73,7 @@ public class BasicGameApp implements Runnable, KeyListener{
                     25
             );
         }
-
+      canOpening = new SoundFile("canopening.wav");
     }
 
 //*******************************************************************************
@@ -101,23 +101,25 @@ public class BasicGameApp implements Runnable, KeyListener{
         }
     }
 
-    public void checkCrash(){
-        if(whiteMonster.rect.intersects(RosaMonster2.rect)&& firstCrash){
-            whiteMonster.dx=-whiteMonster.dx;
-            RosaMonster2.dx=-RosaMonster2.dx;
-            whiteMonster.dy=-whiteMonster.dy;
-            RosaMonster2.dy=-RosaMonster2.dy;
+    public void checkCrash() {
 
+        if (whiteMonster.rect.intersects(RosaMonster2.rect) && firstCrash) {
 
-            RosaMonster2.dx=0;
-            RosaMonster2.dy=0;
+            // reverse both directions
+            whiteMonster.dx = -whiteMonster.dx;
+            whiteMonster.dy = -whiteMonster.dy;
 
-            firstCrash = false;
-            RosaMonster2.isAlive = false;
+            RosaMonster2.dx = -RosaMonster2.dx;
+            RosaMonster2.dy = -RosaMonster2.dy;
+
+            canOpening.play();
+
+            firstCrash = false; // makes it so they stop flipping the key inputs when they touch
         }
 
-        if (!whiteMonster.rect.intersects(RosaMonster2.rect)) {
-            firstCrash = true;
+        // this conditional over here makes it so they can't take up the same space after bouncing once
+        if (whiteMonster.rect.intersects(RosaMonster2.rect)) {
+               firstCrash = true;
         }
     }
 
