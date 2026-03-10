@@ -3,7 +3,7 @@ import java.awt.*;
 public class Whitemonster {
         public int xpos;
         public int ypos;
-        public int width = 120;
+        public int width = 95;
         public int height = 120;
         public int dx = 5;
         public int dy = 4;

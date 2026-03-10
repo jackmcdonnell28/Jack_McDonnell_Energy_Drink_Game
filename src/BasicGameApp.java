@@ -25,6 +25,7 @@ public class BasicGameApp implements Runnable, KeyListener{
     public JPanel panel;
     public boolean pressingKey;
     public SoundFile canOpening;
+    public boolean gameOver = false;
 
 
     public BufferStrategy bufferStrategy;
@@ -52,13 +53,13 @@ public class BasicGameApp implements Runnable, KeyListener{
         setUpGraphics();
         firstCrash = true;
 
-        whiteMonster = new Whitemonster("Whitemonster.png", 0, 300, 75);
+        whiteMonster = new Whitemonster("Whitemonster.png", 0, 0, 75);
         whiteMonsterImage = Toolkit.getDefaultToolkit().getImage("Whitemonster.png");
 
-        RosaMonster2 = new Rosamonster("Rosa monster.png", 1000, 200, 25);
+        RosaMonster2 = new Rosamonster("Rosa monster.png", 0, 0, 25);
         RosaMonsterImage2 = Toolkit.getDefaultToolkit().getImage("Rosa Monster.png");
 
-        ghostWaterfall = new Ghost[8];
+        ghostWaterfall = new Ghost[6];
 
         ghostImage = Toolkit.getDefaultToolkit().getImage("Murica Ghost.png");
 
@@ -80,7 +81,10 @@ public class BasicGameApp implements Runnable, KeyListener{
 
     public void run() {
         while (true) {
-            moveThings();
+
+            if(!gameOver){
+                moveThings();
+            }
 
             render();
             pause(35);
@@ -118,16 +122,16 @@ public class BasicGameApp implements Runnable, KeyListener{
         }
 
         // this conditional over here makes it so they can't take up the same space after bouncing once
-        if (whiteMonster.rect.intersects(RosaMonster2.rect)) {
-               firstCrash = true;
+        if (!whiteMonster.rect.intersects(RosaMonster2.rect)) {
+            firstCrash = true;
         }
     }
 
     public void checkCrashes(){
         for(int x =0; x < ghostWaterfall.length; x++){
             for (int y = 0; y < ghostWaterfall.length; y++){
-                if (ghostWaterfall[x].rect.intersects(ghostWaterfall[y].rect)){
-                    whiteMonster.dx = -whiteMonster.dx;
+                if (ghostWaterfall[x].rect.intersects(RosaMonster2.rect)){
+                    gameOver = true;
                 }
             }
         }
