@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 
 //*******************************************************************************
 
@@ -26,6 +27,10 @@ public class BasicGameApp implements Runnable, KeyListener{
     public boolean pressingKey;
     public SoundFile canOpening;
     public boolean gameOver = false;
+    public boolean up;
+    public boolean down;
+    public boolean left;
+    public boolean right;
 
 
     public BufferStrategy bufferStrategy;
@@ -53,13 +58,25 @@ public class BasicGameApp implements Runnable, KeyListener{
         setUpGraphics();
         firstCrash = true;
 
-        whiteMonster = new Whitemonster("Whitemonster.png", 0, 0, 75);
-        whiteMonsterImage = Toolkit.getDefaultToolkit().getImage("Whitemonster.png");
-
-        RosaMonster2 = new Rosamonster("Rosa monster.png", 0, 0, 25);
-        RosaMonsterImage2 = Toolkit.getDefaultToolkit().getImage("Rosa Monster.png");
+        whiteMonster = new Whitemonster(
+                "Whitemonster.png",
+                (int)(Math.random() * WIDTH -25),
+                (int)(Math.random() * HEIGHT -75),
+                75
+        );
+// it wouldn't work regularly but when i put each thing on a new line it worked somehow
+        RosaMonster2 = new Rosamonster(
+                "Rosa monster.png",
+                (int)(Math.random() * WIDTH),
+                (int)(Math.random() * HEIGHT),
+                25
+        );
 
         ghostWaterfall = new Ghost[6];
+        whiteMonsterImage = new ImageIcon("Whitemonster.png").getImage();
+        RosaMonsterImage2 = new ImageIcon("Rosa Monster.png").getImage();
+        ghostImage = new ImageIcon("Murica Ghost.png").getImage();
+        backgroundImage = new ImageIcon("7-11.jpeg").getImage();
 
         ghostImage = Toolkit.getDefaultToolkit().getImage("Murica Ghost.png");
 
@@ -74,7 +91,7 @@ public class BasicGameApp implements Runnable, KeyListener{
                     25
             );
         }
-      canOpening = new SoundFile("canopening.wav");
+        canOpening = new SoundFile("canopening.wav");
     }
 
 //*******************************************************************************
@@ -103,6 +120,13 @@ public class BasicGameApp implements Runnable, KeyListener{
         for(int x = 0; x < ghostWaterfall.length; x++){
             ghostWaterfall[x].move();
         }
+        whiteMonster.dx = 0;
+        whiteMonster.dy = 0;
+
+        if(up) whiteMonster.dy = -10;
+        if(down) whiteMonster.dy = 10;
+        if(left) whiteMonster.dx = -10;
+        if(right) whiteMonster.dx = 10;
     }
 
     public void checkCrash() {
@@ -149,8 +173,8 @@ public class BasicGameApp implements Runnable, KeyListener{
                 whiteMonster.width, whiteMonster.height, null);
 
 
-            g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos,
-                    RosaMonster2.width, RosaMonster2.height, null);
+        g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos,
+                RosaMonster2.width, RosaMonster2.height, null);
 
         for(int x = 0; x < ghostWaterfall.length; x++){
             g.drawImage(ghostImage,
@@ -163,6 +187,14 @@ public class BasicGameApp implements Runnable, KeyListener{
 
         g.dispose();
         bufferStrategy.show();
+
+
+
+        if(gameOver){
+            g.setFont(new Font("Arial", Font.BOLD, 120));
+            g.setBackground(Color.RED);
+            g.drawString("GAME OVER", 150, 350 );
+        }
     }
 
     public void pause(int time ) {
@@ -172,43 +204,28 @@ public class BasicGameApp implements Runnable, KeyListener{
     }
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
-        pressingKey = true;
-        if (e.getKeyCode() == 38) { //up arrow
-            whiteMonster.dy = -10;
-            whiteMonster.dx = 0;
-        }
-        if (e.getKeyCode() == 40) { //down arrow
-            whiteMonster.dy = 10;
-            whiteMonster.dx = 0;
-        }
-        if (e.getKeyCode() == 37) { //left arrow
-            whiteMonster.dy = 0;
-            whiteMonster.dx = -10;
-        }
-        if (e.getKeyCode() == 39) { //right arrow
-            whiteMonster.dy = 0;
-            whiteMonster.dx = 10;
-        }
-        if (e.getKeyCode() == 87) { //up arrow
+
+        if(e.getKeyCode() == 38) up = true;     // up arrow
+        if(e.getKeyCode() == 40) down = true;   // down arrow
+        if(e.getKeyCode() == 37) left = true;   // left arrow
+        if(e.getKeyCode() == 39) right = true;  // right arrow
+
+        // RosaMonster movement
+        if (e.getKeyCode() == 87) { // W
             RosaMonster2.dy = -10;
             RosaMonster2.dx = 0;
         }
-        if (e.getKeyCode() == 83) { //down arrow
-           RosaMonster2.dy = 10;
+        if (e.getKeyCode() == 83) { // S
+            RosaMonster2.dy = 10;
             RosaMonster2.dx = 0;
         }
-        if (e.getKeyCode() == 65) { //left arrow
+        if (e.getKeyCode() == 65) { // A
             RosaMonster2.dy = 0;
             RosaMonster2.dx = -10;
         }
-        if (e.getKeyCode() == 68) { //right arrow
+        if (e.getKeyCode() == 68) { // D
             RosaMonster2.dy = 0;
             RosaMonster2.dx = 10;
-        }
-        if (e.getKeyCode() == 54-55){ //6-7 keys
-            whiteMonster.dy = whiteMonster.xpos + whiteMonster.dx * (3/4);// makes Monster move in increments of 6, perhaps maybe 7 (dx = 8)
-            whiteMonster.rect = new Rectangle(whiteMonster.xpos, whiteMonster.ypos, whiteMonster.width, whiteMonster.height );
         }
     }
     @Override
@@ -235,11 +252,12 @@ public class BasicGameApp implements Runnable, KeyListener{
         if (e.getKeyCode() == 39) { //39 is right arrow
             whiteMonster.dy = 0;
             whiteMonster.dx = 0;
+            if(e.getKeyCode() == 38) up = false;
+            if(e.getKeyCode() == 40) down = false;
+            if(e.getKeyCode() == 37) left = false;
+            if(e.getKeyCode() == 39) right = false;
         }
-        if (e.getKeyCode() == 54 - 55) { //6-7 keys
-            whiteMonster.dy = whiteMonster.xpos + whiteMonster.dx * (3 / 4);// makes Monster move in increments of 6, perhaps maybe 7 (dx = 8)
-            whiteMonster.rect = new Rectangle(whiteMonster.xpos, whiteMonster.ypos, whiteMonster.width, whiteMonster.height);
-        }
+
     }
     private void setUpGraphics() {
         frame = new JFrame("White Monster Bounce");

@@ -18,7 +18,7 @@ public class Rosamonster {
             pic = p;
             xpos = x;
             ypos = y;
-            rect= new Rectangle(xpos, ypos, width, height);
+            rect = new Rectangle(xpos, ypos, width, height);
             isAlive = true;
             successRate = psuccess;
 
