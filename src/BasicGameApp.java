@@ -31,7 +31,7 @@ public class BasicGameApp implements Runnable, KeyListener{
     public boolean down;
     public boolean left;
     public boolean right;
-
+    public boolean collision;
 
     public BufferStrategy bufferStrategy;
     Whitemonster whiteMonster;
@@ -57,6 +57,7 @@ public class BasicGameApp implements Runnable, KeyListener{
 
         setUpGraphics();
         firstCrash = true;
+        collision = true;
 
         whiteMonster = new Whitemonster(
                 "Whitemonster.png",
@@ -82,19 +83,28 @@ public class BasicGameApp implements Runnable, KeyListener{
 
         //  LOAD BACKGROUND IMAGE (THIS TOOK SO LONG!!!!)
         backgroundImage = Toolkit.getDefaultToolkit().getImage("7-11.jpeg");
-
-        for(int x = 0; x < ghostWaterfall.length; x++){
-            ghostWaterfall[x] = new Ghost(
-                    "ghostDrink " + x,
-                    (int)(Math.random()* WIDTH),
-                    (int)(Math.random()* HEIGHT),
-                    25
-            );
+        while(collision == true) {
+            collision = false;
+            for (int x = 0; x < ghostWaterfall.length; x++) {
+                ghostWaterfall[x] = new Ghost(
+                        "ghostDrink " + x,
+                        (int) (Math.random() * WIDTH),
+                        (int) (Math.random() * HEIGHT),
+                        25
+                );
+                for (int y = 0; y < x; y ++){
+                    if(ghostWaterfall[y].rect.intersects(ghostWaterfall[x].rect)){
+                        System.out.println("hi");
+                        collision = true;
+                    }
+                }
+            }
+            System.out.println(collision);
         }
         canOpening = new SoundFile("canopening.wav");
     }
 
-//*******************************************************************************
+
 
     public void run() {
         while (true) {
@@ -123,10 +133,34 @@ public class BasicGameApp implements Runnable, KeyListener{
         whiteMonster.dx = 0;
         whiteMonster.dy = 0;
 
+
         if(up) whiteMonster.dy = -10;
         if(down) whiteMonster.dy = 10;
         if(left) whiteMonster.dx = -10;
         if(right) whiteMonster.dx = 10;
+
+        whiteMonster.rect = new Rectangle(
+                whiteMonster.xpos,
+                whiteMonster.ypos,
+                whiteMonster.width,
+                whiteMonster.height
+        );
+
+        RosaMonster2.rect = new Rectangle(
+                RosaMonster2.xpos,
+                RosaMonster2.ypos,
+                RosaMonster2.width,
+                RosaMonster2.height
+        );
+
+        for(int i = 0; i < ghostWaterfall.length; i++){
+            ghostWaterfall[i].rect = new Rectangle(
+                    ghostWaterfall[i].xpos,
+                    ghostWaterfall[i].ypos,
+                    ghostWaterfall[i].width,
+                    ghostWaterfall[i].height
+            );
+        }
     }
 
     public void checkCrash() {
@@ -152,11 +186,9 @@ public class BasicGameApp implements Runnable, KeyListener{
     }
 
     public void checkCrashes(){
-        for(int x =0; x < ghostWaterfall.length; x++){
-            for (int y = 0; y < ghostWaterfall.length; y++){
-                if (ghostWaterfall[x].rect.intersects(RosaMonster2.rect)){
-                    gameOver = true;
-                }
+        for(int x = 0; x < ghostWaterfall.length; x++){
+            if (ghostWaterfall[x].rect.intersects(RosaMonster2.rect)){
+                gameOver = true;
             }
         }
     }
@@ -175,6 +207,16 @@ public class BasicGameApp implements Runnable, KeyListener{
 
         g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos,
                 RosaMonster2.width, RosaMonster2.height, null);
+        g.setColor(Color.RED);
+        g.drawRect(RosaMonster2.rect.x, RosaMonster2.rect.y,
+                RosaMonster2.rect.width, RosaMonster2.rect.height);
+
+        for(int i = 0; i < ghostWaterfall.length; i++) {
+            g.drawRect(ghostWaterfall[i].rect.x,
+                    ghostWaterfall[i].rect.y,
+                    ghostWaterfall[i].rect.width,
+                    ghostWaterfall[i].rect.height);
+        }
 
         for(int x = 0; x < ghostWaterfall.length; x++){
             g.drawImage(ghostImage,
