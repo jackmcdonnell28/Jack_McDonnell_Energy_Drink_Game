@@ -19,7 +19,7 @@ public class Ghost {
                 ypos = y;
                 dx = (int)(Math.random()*11) -5;
                 dy = (int)(Math.random()*11) -5;
-                rect= new Rectangle(xpos, ypos, width, height);
+                rect= new Rectangle(xpos + 30, ypos +9, width/3, height/2);
                 isAlive = true;
                 successRate = psuccess;
 
@@ -27,13 +27,13 @@ public class Ghost {
         public void move(){
           xpos=xpos + dx;
           ypos = ypos + dy;
-          rect= new Rectangle(xpos, ypos, width, height);
+          rect= new Rectangle(xpos + 30, ypos +9, width/3, height/2);
 
         }
         public void bounce() {
                 xpos = xpos + dx;
                 ypos = ypos + dy;
-                rect= new Rectangle(xpos, ypos, width, height);
+                rect= new Rectangle(xpos + 30, ypos +9, width/3, height/2);
 
                 if (xpos <= 0) {
                    dx=-dx;
@@ -55,7 +55,7 @@ public class Ghost {
         public void wrap(){
         xpos = xpos + dx;
         ypos = ypos + dy;
-        rect= new Rectangle(xpos, ypos, width, height);
+        rect= new Rectangle(xpos + 30, ypos +9, width/3, height/2);
 
         if(xpos <0) {
         xpos = 1000;

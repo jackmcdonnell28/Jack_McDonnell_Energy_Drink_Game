@@ -32,6 +32,7 @@ public class BasicGameApp implements Runnable, KeyListener{
     public boolean left;
     public boolean right;
     public boolean collision;
+    public SoundFile death;
 
     public BufferStrategy bufferStrategy;
     Whitemonster whiteMonster;
@@ -102,6 +103,7 @@ public class BasicGameApp implements Runnable, KeyListener{
             System.out.println(collision);
         }
         canOpening = new SoundFile("canopening.wav");
+        death = new SoundFile()
     }
 
 
@@ -152,7 +154,7 @@ public class BasicGameApp implements Runnable, KeyListener{
                 RosaMonster2.width,
                 RosaMonster2.height
         );
-
+/*
         for(int i = 0; i < ghostWaterfall.length; i++){
             ghostWaterfall[i].rect = new Rectangle(
                     ghostWaterfall[i].xpos,
@@ -161,6 +163,8 @@ public class BasicGameApp implements Runnable, KeyListener{
                     ghostWaterfall[i].height
             );
         }
+
+ */
     }
 
     public void checkCrash() {
@@ -189,6 +193,7 @@ public class BasicGameApp implements Runnable, KeyListener{
         for(int x = 0; x < ghostWaterfall.length; x++){
             if (ghostWaterfall[x].rect.intersects(RosaMonster2.rect)){
                 gameOver = true;
+
             }
         }
     }
@@ -207,15 +212,13 @@ public class BasicGameApp implements Runnable, KeyListener{
 
         g.drawImage(RosaMonsterImage2, RosaMonster2.xpos, RosaMonster2.ypos,
                 RosaMonster2.width, RosaMonster2.height, null);
-        g.setColor(Color.RED);
-        g.drawRect(RosaMonster2.rect.x, RosaMonster2.rect.y,
-                RosaMonster2.rect.width, RosaMonster2.rect.height);
 
         for(int i = 0; i < ghostWaterfall.length; i++) {
-            g.drawRect(ghostWaterfall[i].rect.x,
+            g.fillRect(ghostWaterfall[i].rect.x,
                     ghostWaterfall[i].rect.y,
                     ghostWaterfall[i].rect.width,
                     ghostWaterfall[i].rect.height);
+
         }
 
         for(int x = 0; x < ghostWaterfall.length; x++){
