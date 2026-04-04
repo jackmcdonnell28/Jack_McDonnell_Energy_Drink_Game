@@ -18,7 +18,7 @@ public class Rosamonster {
             pic = p;
             xpos = x;
             ypos = y;
-            rect = new Rectangle(xpos, ypos, width/3, height/2);
+            rect = new Rectangle(xpos, ypos, width/5, height/2);
             isAlive = true;
             successRate = psuccess;
 
@@ -26,13 +26,13 @@ public class Rosamonster {
         public void move(){
             xpos=xpos + dx;
             ypos = ypos + dy;
-            rect= new Rectangle(xpos, ypos, width/3, height/2);
+            rect= new Rectangle(xpos, ypos, width/5, height/2);
 
         }
         public void bounce() {
             xpos = xpos + dx;
             ypos = ypos + dy;
-            rect= new Rectangle(xpos, ypos, width/3, height/2);
+            rect= new Rectangle(xpos, ypos, width/4, height/2);
 
             if (xpos <= 0) {
                 dx=-dx;
@@ -54,7 +54,7 @@ public class Rosamonster {
         public void wrap(){
             xpos = xpos + dx;
             ypos = ypos + dy;
-            rect= new Rectangle(xpos, ypos, width/3, height/2);
+            rect= new Rectangle(xpos, ypos, width/5, height/2);
 
             if(xpos <0) {
                 xpos = 1000;

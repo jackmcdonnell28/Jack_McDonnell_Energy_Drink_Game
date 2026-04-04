@@ -26,6 +26,7 @@ public class BasicGameApp implements Runnable, KeyListener{
     public JPanel panel;
     public boolean pressingKey;
     public SoundFile canOpening;
+    public SoundFile deathNoise;
     public boolean gameOver = false;
     public boolean up;
     public boolean down;
@@ -103,7 +104,7 @@ public class BasicGameApp implements Runnable, KeyListener{
             System.out.println(collision);
         }
         canOpening = new SoundFile("canopening.wav");
-        death = new SoundFile()
+        deathNoise = new SoundFile("BasicGameDeathNoise.wav");
     }
 
 
@@ -113,6 +114,7 @@ public class BasicGameApp implements Runnable, KeyListener{
 
             if(!gameOver){
                 moveThings();
+
             }
 
             render();
@@ -193,6 +195,7 @@ public class BasicGameApp implements Runnable, KeyListener{
         for(int x = 0; x < ghostWaterfall.length; x++){
             if (ghostWaterfall[x].rect.intersects(RosaMonster2.rect)){
                 gameOver = true;
+                deathNoise.play();
 
             }
         }
@@ -214,10 +217,7 @@ public class BasicGameApp implements Runnable, KeyListener{
                 RosaMonster2.width, RosaMonster2.height, null);
 
         for(int i = 0; i < ghostWaterfall.length; i++) {
-            g.fillRect(ghostWaterfall[i].rect.x,
-                    ghostWaterfall[i].rect.y,
-                    ghostWaterfall[i].rect.width,
-                    ghostWaterfall[i].rect.height);
+
 
         }
 
