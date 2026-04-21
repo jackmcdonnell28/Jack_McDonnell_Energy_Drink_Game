@@ -5,16 +5,20 @@
 //*******************************************************************************
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.event.KeyListener;
 import java.awt.*;
+import java.time.LocalTime;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 
+
 //*******************************************************************************
 
-public class BasicGameApp implements Runnable, KeyListener{
+public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     //Variable Definition Section
     final int WIDTH = 1000;
@@ -34,6 +38,9 @@ public class BasicGameApp implements Runnable, KeyListener{
     public boolean right;
     public boolean collision;
     public SoundFile death;
+    int secondsToday;
+    public int points;
+
 
     public BufferStrategy bufferStrategy;
     Whitemonster whiteMonster;
@@ -43,7 +50,7 @@ public class BasicGameApp implements Runnable, KeyListener{
     Ghost[] ghostWaterfall;
     Image ghostImage;
 
-    // *** BACKGROUND IMAGE (ADDED) ***
+
     Image backgroundImage;
 
     public Boolean firstCrash;
@@ -60,6 +67,9 @@ public class BasicGameApp implements Runnable, KeyListener{
         setUpGraphics();
         firstCrash = true;
         collision = true;
+        secondsToday = LocalTime.now().toSecondOfDay();
+        points = 0;
+        Timer();
 
         whiteMonster = new Whitemonster(
                 "Whitemonster.png",
@@ -181,6 +191,7 @@ public class BasicGameApp implements Runnable, KeyListener{
             RosaMonster2.dy = -RosaMonster2.dy;
 
             canOpening.play();
+            points = points + 150;
 
             firstCrash = false; // makes it so they stop flipping the key inputs when they touch
         }
@@ -304,6 +315,15 @@ public class BasicGameApp implements Runnable, KeyListener{
         }
 
     }
+    public void Timer(){
+        if (secondsToday %10000 == 0) {
+            if (gameOver == false) {
+                points = points + 100;
+            }
+        }
+        System.out.println("points: " + points);
+    }
+
     private void setUpGraphics() {
         frame = new JFrame("White Monster Bounce");
 
@@ -328,6 +348,33 @@ public class BasicGameApp implements Runnable, KeyListener{
         canvas.addKeyListener(this);
         System.out.println("DONE graphic setup");
 
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+       if (e.getY() >= 700){
+
+       }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }
