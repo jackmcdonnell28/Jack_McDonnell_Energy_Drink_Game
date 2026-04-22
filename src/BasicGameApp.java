@@ -40,6 +40,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public SoundFile death;
     int secondsToday;
     public int points;
+    int lastSecond;
 
 
     public BufferStrategy bufferStrategy;
@@ -121,6 +122,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     public void run() {
         while (true) {
+
+            Timer();
 
             if(!gameOver){
                 moveThings();
@@ -240,7 +243,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
                     ghostWaterfall[x].height,
                     null);
         }
-
+        g.setFont(new Font("Arial", Font.BOLD, 30));
+        g.setColor(Color.WHITE);
+        g.drawString("Points: " + points, 20, 40);
         g.dispose();
         bufferStrategy.show();
 
@@ -316,12 +321,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     }
     public void Timer(){
-        if (secondsToday %10000 == 0) {
-            if (gameOver == false) {
-                points = points + 100;
+        int currentSecond = LocalTime.now().toSecondOfDay();
+
+        if(currentSecond != lastSecond){ // runs once per second
+            if(!gameOver){
+                points = points + 10; // adjust points per second here
             }
+            lastSecond = currentSecond;
         }
-        System.out.println("points: " + points);
     }
 
     private void setUpGraphics() {
