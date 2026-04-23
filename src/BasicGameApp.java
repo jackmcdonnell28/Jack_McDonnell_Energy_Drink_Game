@@ -86,7 +86,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
                 25
         );
 
-        ghostWaterfall = new Ghost[6];
+        ghostWaterfall = new Ghost[14];
         whiteMonsterImage = new ImageIcon("Whitemonster.png").getImage();
         RosaMonsterImage2 = new ImageIcon("Rosa Monster.png").getImage();
         ghostImage = new ImageIcon("Murica Ghost.png").getImage();
@@ -135,6 +135,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         }
     }
 
+
     public void moveThings() {
         whiteMonster.wrap();
         RosaMonster2.wrap();
@@ -169,7 +170,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
                 RosaMonster2.width,
                 RosaMonster2.height
         );
-/*
+
         for(int i = 0; i < ghostWaterfall.length; i++){
             ghostWaterfall[i].rect = new Rectangle(
                     ghostWaterfall[i].xpos,
@@ -179,7 +180,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             );
         }
 
- */
+
     }
 
     public void checkCrash() {
@@ -249,6 +250,37 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         g.dispose();
         bufferStrategy.show();
 
+            if (points <= 1000){
+                g.drawImage(ghostImage,
+                        ghostWaterfall[6].xpos,
+                        ghostWaterfall[6].ypos,
+                        ghostWaterfall[6].width,
+                        ghostWaterfall[6].height,
+                        null);
+            } else if (points <= 2500) {
+                g.drawImage(ghostImage,
+                        ghostWaterfall[9].xpos,
+                        ghostWaterfall[9].ypos,
+                        ghostWaterfall[9].width,
+                        ghostWaterfall[9].height,
+                        null);
+            } else if (points <= 5000) {
+                g.drawImage(ghostImage,
+                        ghostWaterfall[12].xpos,
+                        ghostWaterfall[12].ypos,
+                        ghostWaterfall[12].width,
+                        ghostWaterfall[12].height,
+                        null);
+            }
+            else {
+                g.drawImage(ghostImage,
+                        ghostWaterfall[14].xpos,
+                        ghostWaterfall[14].ypos,
+                        ghostWaterfall[14].width,
+                        ghostWaterfall[14].height,
+                        null);
+            }
+
 
 
         if(gameOver){
@@ -257,6 +289,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             g.drawString("GAME OVER", 150, 350 );
         }
     }
+
 
     public void pause(int time ) {
         try {
