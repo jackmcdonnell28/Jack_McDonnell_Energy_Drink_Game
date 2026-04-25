@@ -205,13 +205,20 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             firstCrash = true;
         }
     }
+    public int getNumGhosts(){
+        if (points > 5000) return 14;
+        if (points > 2500) return 12;
+        if (points > 1000) return 9;
+        return 6;
+    }
 
     public void checkCrashes(){
-        for(int x = 0; x < ghostWaterfall.length; x++){
+        int numGhosts = getNumGhosts();
+
+        for(int x = 0; x < numGhosts; x++){
             if (ghostWaterfall[x].rect.intersects(RosaMonster2.rect)){
                 gameOver = true;
                 deathNoise.play();
-
             }
         }
     }
@@ -236,7 +243,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
         }
 
-        for(int x = 0; x < ghostWaterfall.length; x++){
+        int numGhosts = 6;
+
+        if (points > 1000) numGhosts = 9;
+        if (points > 2500) numGhosts = 12;
+        if (points > 5000) numGhosts = 14; // max since array is size 14
+
+        for(int x = 0; x < numGhosts; x++){
             g.drawImage(ghostImage,
                     ghostWaterfall[x].xpos,
                     ghostWaterfall[x].ypos,
@@ -250,36 +263,39 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         g.dispose();
         bufferStrategy.show();
 
-            if (points <= 1000){
-                g.drawImage(ghostImage,
-                        ghostWaterfall[6].xpos,
-                        ghostWaterfall[6].ypos,
-                        ghostWaterfall[6].width,
-                        ghostWaterfall[6].height,
-                        null);
-            } else if (points <= 2500) {
-                g.drawImage(ghostImage,
-                        ghostWaterfall[9].xpos,
-                        ghostWaterfall[9].ypos,
-                        ghostWaterfall[9].width,
-                        ghostWaterfall[9].height,
-                        null);
-            } else if (points <= 5000) {
-                g.drawImage(ghostImage,
-                        ghostWaterfall[12].xpos,
-                        ghostWaterfall[12].ypos,
-                        ghostWaterfall[12].width,
-                        ghostWaterfall[12].height,
-                        null);
-            }
-            else {
-                g.drawImage(ghostImage,
-                        ghostWaterfall[14].xpos,
-                        ghostWaterfall[14].ypos,
-                        ghostWaterfall[14].width,
-                        ghostWaterfall[14].height,
-                        null);
-            }
+
+        if (points <= 1000){
+            g.drawImage(ghostImage,
+                    ghostWaterfall[6].xpos,
+                    ghostWaterfall[6].ypos,
+                    ghostWaterfall[6].width,
+                    ghostWaterfall[6].height,
+                    null);
+
+        } else if (points <= 2500) {
+            g.drawImage(ghostImage,
+                    ghostWaterfall[9].xpos,
+                    ghostWaterfall[9].ypos,
+                    ghostWaterfall[9].width,
+                    ghostWaterfall[9].height,
+                    null);
+
+        } else if (points <= 5000) {
+            g.drawImage(ghostImage,
+                    ghostWaterfall[12].xpos,
+                    ghostWaterfall[12].ypos,
+                    ghostWaterfall[12].width,
+                    ghostWaterfall[12].height,
+                    null);
+
+        } else if (points <= 10000){
+            g.drawImage(ghostImage,
+                    ghostWaterfall[13].xpos, // FIXED index
+                    ghostWaterfall[13].ypos,
+                    ghostWaterfall[13].width,
+                    ghostWaterfall[13].height,
+                    null);
+        }
 
 
 
