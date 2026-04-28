@@ -245,9 +245,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
         int numGhosts = 6;
 
-        if (points > 1000) numGhosts = 9;
-        if (points > 2500) numGhosts = 12;
-        if (points > 5000) numGhosts = 14; // max since array is size 14
+        if (points > 1000) numGhosts = 8;
+        if (points > 2000) numGhosts = 10;
+        if (points > 2500) numGhosts = 12; // max since array is size 14 (i adjusted the numbers so the game would lowk be playable)
 
         for(int x = 0; x < numGhosts; x++){
             g.drawImage(ghostImage,
