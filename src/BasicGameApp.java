@@ -248,6 +248,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         if (points > 1000) numGhosts = 8;
         if (points > 2000) numGhosts = 10;
         if (points > 2500) numGhosts = 12; // max since array is size 14 (i adjusted the numbers so the game would lowk be playable)
+        //now the game cant immediately start with u being dead.
 
         for(int x = 0; x < numGhosts; x++){
             g.drawImage(ghostImage,
@@ -260,6 +261,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         g.setFont(new Font("Arial", Font.BOLD, 30));
         g.setColor(Color.WHITE);
         g.drawString("Points: " + points, 20, 40);
+        if(gameOver){
+            g.setFont(new Font("Arial", Font.BOLD, 120));
+            g.setBackground(Color.RED);
+            g.drawString("GAME OVER", 150, 350 );
+        }
         g.dispose();
         bufferStrategy.show();
 
@@ -299,13 +305,12 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
 
 
-        if(gameOver){
-            g.setFont(new Font("Arial", Font.BOLD, 120));
-            g.setBackground(Color.RED);
-            g.drawString("GAME OVER", 150, 350 );
-        }
-    }
 
+
+
+
+
+}
 
     public void pause(int time ) {
         try {
