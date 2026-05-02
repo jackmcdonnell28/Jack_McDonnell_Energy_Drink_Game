@@ -68,6 +68,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         setUpGraphics();
         firstCrash = true;
         collision = true;
+        canvas.addMouseListener(this);
         secondsToday = LocalTime.now().toSecondOfDay();
         points = 0;
         Timer();
@@ -134,7 +135,21 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             pause(35);
         }
     }
+public void resetTheGame(){//this makes it so that the game never rly stops, so it can reset wihtout having to run the code again.
+        points = 0;
+        gameOver = false;
 
+    whiteMonster.xpos = (int)(Math.random() * WIDTH);
+    whiteMonster.ypos = (int)(Math.random() * HEIGHT);
+
+    RosaMonster2.xpos = (int)(Math.random() * WIDTH);
+    RosaMonster2.ypos = (int)(Math.random() * HEIGHT);
+
+    for (int i = 0; i < ghostWaterfall.length; i++) {
+        ghostWaterfall[i].xpos = (int)(Math.random() * WIDTH);
+        ghostWaterfall[i].ypos = (int)(Math.random() * HEIGHT);
+    }
+}
 
     public void moveThings() {
         whiteMonster.wrap();
@@ -414,14 +429,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-       if (e.getY() >= 700){
 
-       }
+
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+            if (gameOver) {
+                resetTheGame();
+            }
     }
 
     @Override
